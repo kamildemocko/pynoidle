@@ -1,21 +1,20 @@
 # PyNoIdle
 
-A lightweight Python application that prevents your system from going idle by subtly moving the mouse cursor.
+A lightweight Python application that prevents your system from going idle by subtly simulating keyboard activity.
 
 ## Description
 
-PyNoIdle runs as a system tray application that automatically **wiggles** your mouse cursor to keep your system active. It features a simple toggle interface and visual **notifications** to let you know when it's active.
+PyNoIdle runs as a system tray application that automatically simulates keyboard presses to keep your system active. 
+It features a simple toggle interface and visual **notifications** to let you know when it's active.
 
 ## Features
 
 - **System Tray Integration**: Clean interface with start/stop toggle
-- **Smart Detection**: Only activates after detecting mouse inactivity
-- **Minimal Movement**: Subtle 1-pixel cursor movements
+- **Minimal Activity**: Subtle key presses that don't interfere with your work
 
 ## Requirements
 
-- Python 3.13+
-- Dependencies: mouse, pillow, pystray
+- Dependencies: keyboard, pillow, pystray
 
 ## Installation
 
@@ -32,14 +31,13 @@ uv run pynoidle
 ```
 
 The application will appear in your system tray with these options:
-- **Start/Stop**: Toggle mouse wiggling on/off
+- **Start/Stop**: Toggle keyboard activity on/off
 - **Quit**: Exit the application
 
 ## Configuration
 
 Default settings in `main.py`:
-- `START_TIME_AFTER_SEC = 10`: Seconds of inactivity before wiggling starts
-- `IN_BETWEEN_DELAY = 3`: Seconds between each wiggle movement
+- `IN_BETWEEN_DELAY = 20`: Seconds between each key press
 
 ## License
 

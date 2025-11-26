@@ -2,49 +2,35 @@ from time import sleep
 from time import perf_counter
 import threading
 
-import mouse
+import keyboard
 
 class Idler:
-    def __init__(self, start_after: int, delay: int) -> None:
-        self._start_after = start_after
+    def __init__(self, delay: int) -> None:
         self._delay = delay
         self._running = False
         self._thread = None
 
-        self.current_cur_pos = self._fetch_current_position()
-        self.next_position: tuple[int, int]
-
-        self._get_next_position()
-
-    def _fetch_current_position(self) -> tuple[int, int]:
-        return mouse.get_position()
-    
-    def _get_next_position(self) -> None:
-        self.next_position = (self.current_cur_pos[0] + 1, self.current_cur_pos[1])
-    
-    def _wiggle_tick(self) -> None:
-        mouse.move(*self.next_position)
-        self.next_position, self.current_cur_pos = self.current_cur_pos, self.next_position
-    
-    def start_wiggling(self) -> None:
+    def start(self) -> None:
         if self._running:
             return
 
         self._running = True
-        self._thread = threading.Thread(target=self._wiggle)
+        self._thread = threading.Thread(target=self._prevent_idle)
         self._thread.daemon = True
         self._thread.start()
     
-    def stop_wiggling(self) -> None:
+    def stop(self) -> None:
         self._running = False
         if not self._thread:
             return
         
         self._thread.join()
+    
+    def _call_key(self) -> None:
+        keyboard.press_and_release("f13")
 
-    def _wiggle(self) -> None:
-        start_time = perf_counter()
-        loop_cycle_start = start_time
+    def _prevent_idle(self) -> None:
+        loop_cycle_start = perf_counter()
 
         while self._running:
             now_time = perf_counter()
@@ -55,16 +41,4 @@ class Idler:
 
             loop_cycle_start = now_time
 
-            cursor_pos_now = self._fetch_current_position()
-
-            if cursor_pos_now != self.current_cur_pos:
-                self.current_cur_pos = cursor_pos_now
-                self._get_next_position()
-                start_time = perf_counter()
-                continue
-
-            now_time = perf_counter()
-            if now_time <= start_time + self._start_after:
-                continue
-
-            self._wiggle_tick()
+            self._call_key()
