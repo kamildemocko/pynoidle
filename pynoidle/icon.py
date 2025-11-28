@@ -42,7 +42,7 @@ class Icon:
             self.caffeinated = False
 
             self.icon.icon = Icon.icon_off
-            self.icon.notify("Your mouse is free to rest..")
+            self.icon.notify("Your system is free to rest..")
 
         else:
             self.turn_on()

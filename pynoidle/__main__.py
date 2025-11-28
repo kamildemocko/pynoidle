@@ -2,7 +2,7 @@ from idler import Idler
 from icon import Icon
 
 
-IN_BETWEEN_DELAY = 20
+IN_BETWEEN_DELAY = 60
 
 
 def main():
