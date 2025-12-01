@@ -1,8 +1,8 @@
-from time import sleep
-from time import perf_counter
 import threading
+from time import perf_counter, sleep
 
 import keyboard
+
 
 class Idler:
     def __init__(self, delay: int) -> None:
@@ -18,14 +18,14 @@ class Idler:
         self._thread = threading.Thread(target=self._prevent_idle)
         self._thread.daemon = True
         self._thread.start()
-    
+
     def stop(self) -> None:
         self._running = False
         if not self._thread:
             return
-        
+
         self._thread.join()
-    
+
     def _call_key(self) -> None:
         keyboard.press_and_release("f13")
 

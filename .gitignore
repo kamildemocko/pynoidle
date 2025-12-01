@@ -11,3 +11,4 @@ wheels/
 
 # Other
 __main__.spec
+.vscode/
