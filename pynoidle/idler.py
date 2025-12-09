@@ -5,15 +5,20 @@ import keyboard
 
 
 class Idler:
-    def __init__(self, delay: int) -> None:
+    def __init__(self, delay: int, key: str = "F13") -> None:
         self._delay = delay
         self._running = False
         self._thread = None
 
+        if not self._validate_key_valid(key):
+            raise ValueError(f"key {key} is invalid")
+
+        self._key = key
+
     def start(self) -> None:
         if self._running:
             return
-
+        
         self._running = True
         self._thread = threading.Thread(target=self._prevent_idle)
         self._thread.daemon = True
@@ -25,9 +30,25 @@ class Idler:
             return
 
         self._thread.join()
+    
+    def _validate_key_valid(self, key: str) -> bool:
+        """check if the keyboard key is valid"""
+        
+        try:
+            keyboard.parse_hotkey(key)
+            self._key_validated = True
+            return True
 
-    def _call_key(self) -> None:
-        keyboard.press_and_release("f13")
+        except ValueError:
+            return False
+
+    def _call_key(self, key: str) -> None:
+        """tries to press and release the key, does nothing if fails"""
+        try:
+            keyboard.press_and_release(key)
+
+        except Exception:
+            print(f"failed to press the {key} key")
 
     def _prevent_idle(self) -> None:
         loop_cycle_start = perf_counter()
@@ -41,4 +62,4 @@ class Idler:
 
             loop_cycle_start = now_time
 
-            self._call_key()
+            self._call_key(self._key)

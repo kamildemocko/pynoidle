@@ -5,7 +5,7 @@ from arguments import parse_args
 
 def main():
     args = parse_args()
-    idler = Idler(args.delay)
+    idler = Idler(args.delay, args.key)
     icon = Icon(idler.start, idler.stop)
 
     print("pynoidle is running...")
