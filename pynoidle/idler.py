@@ -29,6 +29,8 @@ class Idler:
     def _call_key(self) -> None:
         try:
             keyboard.press_and_release("f13")
+        except (SystemExit, KeyboardInterrupt):
+            raise  # Don't suppress intentional program termination
         except Exception as e:
             # Keyboard operations may fail after system suspend/resume
             # Continue running despite the error
@@ -48,6 +50,8 @@ class Idler:
                 loop_cycle_start = now_time
 
                 self._call_key()
+            except (SystemExit, KeyboardInterrupt):
+                raise  # Don't suppress intentional program termination
             except Exception as e:
                 # Handle any unexpected errors (e.g., during system suspend/resume)
                 # and continue running instead of crashing
