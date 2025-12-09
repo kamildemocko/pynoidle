@@ -27,18 +27,29 @@ class Idler:
         self._thread.join()
 
     def _call_key(self) -> None:
-        keyboard.press_and_release("f13")
+        try:
+            keyboard.press_and_release("f13")
+        except Exception as e:
+            # Keyboard operations may fail after system suspend/resume
+            # Continue running despite the error
+            print(f"Warning: Failed to press key: {e}")
 
     def _prevent_idle(self) -> None:
         loop_cycle_start = perf_counter()
 
         while self._running:
-            now_time = perf_counter()
+            try:
+                now_time = perf_counter()
 
-            if now_time - loop_cycle_start < self._delay:
-                sleep(0.25)
-                continue
+                if now_time - loop_cycle_start < self._delay:
+                    sleep(0.25)
+                    continue
 
-            loop_cycle_start = now_time
+                loop_cycle_start = now_time
 
-            self._call_key()
+                self._call_key()
+            except Exception as e:
+                # Handle any unexpected errors (e.g., during system suspend/resume)
+                # and continue running instead of crashing
+                print(f"Warning: Error in idle prevention loop: {e}")
+                sleep(1)  # Brief pause before retrying
