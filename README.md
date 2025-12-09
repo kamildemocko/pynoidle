@@ -36,8 +36,25 @@ The application will appear in your system tray with these options:
 
 ## Configuration
 
-Default settings in `main.py`:
-- `IN_BETWEEN_DELAY = 20`: Seconds between each key press
+You can customize PyNoIdle using command-line arguments:
+
+```bash
+uv run pynoidle [options]
+```
+
+**Available options:**
+- `-k, --key <KEY>`: Key to press (default: F13)
+- `-d, --delay <SECONDS>`: Delay between key presses in seconds (default: 60)
+- `-s, --no-start`: Don't start pressing keys automatically on startup
+
+**Examples:**
+```bash
+# Use a different key with custom delay
+uv run pynoidle --key F14 --delay 30
+
+# Start without auto-activation
+uv run pynoidle --no-start
+```
 
 ## License
 
